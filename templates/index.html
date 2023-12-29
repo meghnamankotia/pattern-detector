@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+    <style>
+        body { font-family:Arial, Helvetica, sans-serif}
+        td,th { padding: 10px;
+        text-align: center;}
+        .bullish { background-color: green; color: white; }
+        .bearish { background-color: red; color: white;}
+    </style>
+    <title>screener</title>
+</head>
+<body>
+
+<!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+  <div class="tradingview-widget-copyright"><a href="https://in.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+  {
+  "symbols": [
+    {
+      "proName": "FOREXCOM:SPXUSD",
+      "title": "S&P 500"
+    },
+    {
+      "proName": "FOREXCOM:NSXUSD",
+      "title": "US 100"
+    },
+    {
+      "proName": "FX_IDC:EURUSD",
+      "title": "EUR to USD"
+    },
+    {
+      "proName": "BITSTAMP:BTCUSD",
+      "title": "Bitcoin"
+    },
+    {
+      "proName": "BITSTAMP:ETHUSD",
+      "title": "Ethereum"
+    }
+  ],
+  "showSymbolLogo": true,
+  "colorTheme": "light",
+  "isTransparent": false,
+  "displayMode": "adaptive",
+  "locale": "in"
+}
+  </script>
+</div>
+<!-- TradingView Widget END -->
+
+    <h1 style="padding-left: 10px;">Candlestick screener</h1>
+    <form style="padding-left: 10px;">
+        <select name="pattern">
+            <option value="">-- Select a Pattern --</option>
+            {% for key in patterns %}
+                <option value="{{ key }}" {% if key== current_pattern %} selected="selected"{% endif %}>{{ patterns[key] }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" value="scan" />
+    </form>
+    <div style="display: inline-flex; width: 75%; overflow: auto; float: left; padding-right: 0%; margin-right: 0%;">
+      <table style="width: 90%;">
+        <tr>
+            <th style="width: 20%;">
+                symbol
+            </th>
+            <th style="width: 33%;">
+                stock name
+            </th>
+            <th style="width: 20%;">
+                signal
+            </th>
+        </tr>
+        <br>
+        <br>
+        {% for stock in stocks %}
+            {% if stocks[stock][current_pattern] %}
+            <tr>
+                <td>{{ stock }}</td>
+                <td>{{stocks[stock]['company']}}</td>
+                <td class="{{ stocks[stock][current_pattern]}}">{{ stocks[stock][current_pattern]}}</td>
+            </tr>
+              <td colspan="3" style="padding-left: 100;">
+                <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+                {{stocks[stock]['chart']|safe}}
+              </td>
+              <tr>
+                <td colspan="3">
+                  <hr style="padding-left: 100;">
+                </td>
+              </tr>
+            {% endif %}
+        {% endfor %}
+      </table>
+    </div>
+    <div style="display: inline-block; width: 20%; padding: 0%; margin: 0;">
+     <!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+  <div class="tradingview-widget-copyright"><a href="https://in.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+  {
+  "feedMode": "market",
+  "market": "stock",
+  "colorTheme": "light",
+  "isTransparent": false,
+  "displayMode": "regular",
+  "width": "360",
+  "height": "830",
+  "locale": "in"
+}
+  </script>
+</div>
+<!-- TradingView Widget END -->
+    </div>
+</body>
+</html>
